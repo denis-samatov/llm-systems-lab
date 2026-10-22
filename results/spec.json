@@ -1,0 +1,126 @@
+{
+  "suite": "spec",
+  "manifest": {
+    "created_utc": "2026-10-22T11:13:58+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "spec"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "prompts": 16,
+  "max_new_tokens": 64,
+  "target_params": 5475584,
+  "draft_params": 926336,
+  "target_only_s": {
+    "mean": 0.2464114131249744,
+    "p50": 0.23306599200031997,
+    "p95": 0.3160491090002324,
+    "n": 16
+  },
+  "draft_cost_ratio": 0.4115295245524637,
+  "rows": [
+    {
+      "k": 1,
+      "temperature": 0.0,
+      "acceptance_rate": 0.7240802675585284,
+      "tokens_per_target_forward": 1.6677524429967427,
+      "speedup_vs_target_only": 1.214562574618814,
+      "greedy_outputs_identical": 16
+    },
+    {
+      "k": 2,
+      "temperature": 0.0,
+      "acceptance_rate": 0.6208017334777898,
+      "tokens_per_target_forward": 2.1333333333333333,
+      "speedup_vs_target_only": 1.40020610950154,
+      "greedy_outputs_identical": 16
+    },
+    {
+      "k": 3,
+      "temperature": 0.0,
+      "acceptance_rate": 0.5319327731092437,
+      "tokens_per_target_forward": 2.4380952380952383,
+      "speedup_vs_target_only": 1.3346592494276115,
+      "greedy_outputs_identical": 16
+    },
+    {
+      "k": 4,
+      "temperature": 0.0,
+      "acceptance_rate": 0.4835714285714286,
+      "tokens_per_target_forward": 2.7379679144385025,
+      "speedup_vs_target_only": 1.3374468768539884,
+      "greedy_outputs_identical": 16
+    },
+    {
+      "k": 6,
+      "temperature": 0.0,
+      "acceptance_rate": 0.3824317086234601,
+      "tokens_per_target_forward": 3.002932551319648,
+      "speedup_vs_target_only": 1.0729525218349192,
+      "greedy_outputs_identical": 16
+    },
+    {
+      "k": 1,
+      "temperature": 0.8,
+      "acceptance_rate": 0.629746835443038,
+      "tokens_per_target_forward": 1.5802469135802468,
+      "speedup_vs_target_only": 1.2122189949453963,
+      "greedy_outputs_identical": null
+    },
+    {
+      "k": 2,
+      "temperature": 0.8,
+      "acceptance_rate": 0.49324324324324326,
+      "tokens_per_target_forward": 1.9068901303538175,
+      "speedup_vs_target_only": 1.1171529614349336,
+      "greedy_outputs_identical": null
+    },
+    {
+      "k": 3,
+      "temperature": 0.8,
+      "acceptance_rate": 0.4226498889711325,
+      "tokens_per_target_forward": 2.1557894736842105,
+      "speedup_vs_target_only": 1.1504595526957502,
+      "greedy_outputs_identical": null
+    },
+    {
+      "k": 4,
+      "temperature": 0.8,
+      "acceptance_rate": 0.3571004159239453,
+      "tokens_per_target_forward": 2.2857142857142856,
+      "speedup_vs_target_only": 1.1335193992575063,
+      "greedy_outputs_identical": null
+    },
+    {
+      "k": 6,
+      "temperature": 0.8,
+      "acceptance_rate": 0.26304713804713803,
+      "tokens_per_target_forward": 2.409411764705882,
+      "speedup_vs_target_only": 0.7456929687949866,
+      "greedy_outputs_identical": null
+    }
+  ]
+}

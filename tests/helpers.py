@@ -32,8 +32,13 @@ def run_train(
     timeout: int = 300,
     check: bool = True,
 ) -> subprocess.CompletedProcess:
-    ov = {"name": name, "output_dir": str(out_dir), "data.tokenizer_path": str(ROOT / "artifacts" / "tokenizer.json"),
-          "data.raw_dir": str(ROOT / "data" / "raw"), **(overrides or {})}
+    ov = {
+        "name": name,
+        "output_dir": str(out_dir),
+        "data.tokenizer_path": str(ROOT / "artifacts" / "tokenizer.json"),
+        "data.raw_dir": str(ROOT / "data" / "raw"),
+        **(overrides or {}),
+    }
     args = ["train", str(TINY)]
     for k, v in ov.items():
         args += ["-o", f"{k}={json.dumps(v) if not isinstance(v, str) else v}"]
@@ -42,13 +47,24 @@ def run_train(
     if nproc == 1 and max_restarts == 0:
         cmd = [sys.executable, "-m", "llmlab.cli", *args]
     else:
-        cmd = [sys.executable, "-m", "torch.distributed.run", f"--nproc_per_node={nproc}",
-               f"--max-restarts={max_restarts}", "--rdzv-backend=c10d", f"--rdzv-endpoint=127.0.0.1:{free_port()}",
-               "-m", "llmlab.cli", *args]
+        cmd = [
+            sys.executable,
+            "-m",
+            "torch.distributed.run",
+            f"--nproc_per_node={nproc}",
+            f"--max-restarts={max_restarts}",
+            "--rdzv-backend=c10d",
+            f"--rdzv-endpoint=127.0.0.1:{free_port()}",
+            "-m",
+            "llmlab.cli",
+            *args,
+        ]
     full_env = {**os.environ, "OMP_NUM_THREADS": "1", "LLMLAB_PG_TIMEOUT_S": "60", **(env or {})}
     proc = subprocess.run(cmd, cwd=ROOT, env=full_env, capture_output=True, text=True, timeout=timeout)
     if check and proc.returncode != 0:
-        raise AssertionError(f"training failed ({proc.returncode}):\n{proc.stdout[-3000:]}\n{proc.stderr[-6000:]}")
+        raise AssertionError(
+            f"training failed ({proc.returncode}):\n{proc.stdout[-3000:]}\n{proc.stderr[-6000:]}"
+        )
     return proc
 
 

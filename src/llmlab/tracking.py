@@ -41,7 +41,9 @@ def start_run(cfg, extra_params: dict | None = None, experiment: str = "llm-syst
 
 def log_metrics(record: dict, step: int) -> None:
     mlflow = _mlflow()
-    mlflow.log_metrics({k: float(v) for k, v in record.items() if isinstance(v, int | float) and k != "step"}, step=step)
+    mlflow.log_metrics(
+        {k: float(v) for k, v in record.items() if isinstance(v, int | float) and k != "step"}, step=step
+    )
 
 
 def end_run(summary: dict, run_dir: Path) -> None:
@@ -60,8 +62,13 @@ def end_run(summary: dict, run_dir: Path) -> None:
     mlflow.end_run()
 
 
-def log_benchmark(name: str, params: dict, metrics: dict, artifact: Path | None = None,
-                  experiment: str = "llm-systems-lab-bench") -> str:
+def log_benchmark(
+    name: str,
+    params: dict,
+    metrics: dict,
+    artifact: Path | None = None,
+    experiment: str = "llm-systems-lab-bench",
+) -> str:
     mlflow = _mlflow()
     mlflow.set_experiment(experiment)
     with mlflow.start_run(run_name=name) as run:

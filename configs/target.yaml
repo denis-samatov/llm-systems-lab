@@ -1,7 +1,9 @@
-# Main model used by the inference-engine benchmarks (~5M parameters incl. embeddings).
+# Main model used by the inference-engine benchmarks (5.5M parameters incl. embeddings).
+# The train split has only ~211k tokens: 1500 steps (~29 epochs) overfit badly (dev loss
+# 3.39 at step 400 -> 3.96 at step 900), so the budget is 500 steps, chosen on dev loss.
 name: target
 model: {vocab_size: 4096, d_model: 256, n_layers: 6, n_heads: 8, n_kv_heads: 4, max_seq_len: 512}
 data: {seq_len: 128}
 optim: {lr: 3.0e-3, warmup_steps: 50}
-train: {steps: 1500, micro_batch_size: 32, grad_accum: 1, eval_every: 100, eval_batches: 16, checkpoint_every: 250, log_every: 25}
+train: {steps: 500, micro_batch_size: 32, grad_accum: 1, eval_every: 50, eval_batches: 16, checkpoint_every: 250, log_every: 25}
 mlflow: true

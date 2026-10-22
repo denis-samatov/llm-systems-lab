@@ -12,7 +12,6 @@ These are CPU/gloo runs: they verify algorithmic equivalence, not multi-GPU perf
 from __future__ import annotations
 
 import pytest
-
 from helpers import final_state, max_abs_diff, run_train, summary
 
 pytestmark = pytest.mark.slow
@@ -26,11 +25,21 @@ def runs(tmp_path_factory):
     run_train(out, "single_acc2", overrides={**STEPS, "train.grad_accum": 2})
     run_train(out, "ddp2", nproc=2, overrides={**STEPS, "parallel.mode": "ddp"})
     run_train(out, "fsdp2_2", nproc=2, overrides={**STEPS, "parallel.mode": "fsdp2"})
-    run_train(out, "fsdp2_2_noreshard", nproc=2,
-              overrides={**STEPS, "parallel.mode": "fsdp2", "parallel.reshard_after_forward": False})
-    run_train(out, "ddp2_acc2", nproc=2, overrides={**STEPS, "parallel.mode": "ddp", "train.grad_accum": 2,
-                                                   "train.micro_batch_size": 2})
-    run_train(out, "single_acc4_mbs2", overrides={**STEPS, "train.grad_accum": 4, "train.micro_batch_size": 2})
+    run_train(
+        out,
+        "fsdp2_2_noreshard",
+        nproc=2,
+        overrides={**STEPS, "parallel.mode": "fsdp2", "parallel.reshard_after_forward": False},
+    )
+    run_train(
+        out,
+        "ddp2_acc2",
+        nproc=2,
+        overrides={**STEPS, "parallel.mode": "ddp", "train.grad_accum": 2, "train.micro_batch_size": 2},
+    )
+    run_train(
+        out, "single_acc4_mbs2", overrides={**STEPS, "train.grad_accum": 4, "train.micro_batch_size": 2}
+    )
     return out
 
 
@@ -67,3 +76,14 @@ def test_fsdp2_shards_parameter_and_optimizer_memory(runs):
     # can be uneven by one row, and AdamW keeps unsharded scalar step counters).
     assert fsdp["param_bytes"] <= single["param_bytes"] / 2 * 1.02
     assert fsdp["optim_bytes"] <= single["optim_bytes"] / 2 * 1.02
+
+
+def test_four_rank_ddp_and_fsdp2_match_single_device(tmp_path):
+    """World size 4 (1 micro-batch of 1 per rank) == single device with 4 micro-batches."""
+    over = {**STEPS, "train.micro_batch_size": 1}
+    run_train(tmp_path, "single_acc4", overrides={**over, "train.grad_accum": 4})
+    run_train(tmp_path, "ddp4", nproc=4, overrides={**over, "parallel.mode": "ddp"})
+    run_train(tmp_path, "fsdp4", nproc=4, overrides={**over, "parallel.mode": "fsdp2"})
+    ref = final_state(tmp_path, "single_acc4")
+    assert max_abs_diff(ref, final_state(tmp_path, "ddp4")) < TOL
+    assert max_abs_diff(ref, final_state(tmp_path, "fsdp4")) < TOL

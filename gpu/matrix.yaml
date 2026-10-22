@@ -1,0 +1,27 @@
+# GPU serving benchmark matrix. NOT EXECUTED in the development environment (no GPU).
+# Flags verified against the vLLM "stable" CLI docs and SGLang docs on 2026-10-22
+# (docs.vllm.ai/en/stable/cli/bench/serve, docs.sglang.io/docs/developer_guide/bench_serving).
+model: Qwen/Qwen3-8B            # 8B dense, Apache-2.0; needs ~17 GB in bf16
+awq_model: Qwen/Qwen3-8B-AWQ     # check availability before running
+workload:
+  num_prompts: 400
+  input_len: 1024
+  output_len: 256
+  range_ratio: 0.5               # SGLang only; vLLM uses --random-range-ratio as well
+  request_rates: [2, 8, inf]
+  max_concurrency: 64
+  seed: 1
+prefix_workload:                 # shared-prefix effect (prefix caching / RadixAttention)
+  dataset: prefix_repetition     # vLLM dataset name
+  prefix_len: 768
+  suffix_len: 256
+runs:
+  - {id: vllm-bf16,           engine: vllm,   args: []}
+  - {id: vllm-bf16-noprefix,  engine: vllm,   args: ["--no-enable-prefix-caching"]}
+  - {id: vllm-fp8,            engine: vllm,   args: ["--quantization", "fp8"]}
+  - {id: vllm-awq,            engine: vllm,   model_key: awq_model, args: []}
+  - {id: vllm-seqs32,         engine: vllm,   args: ["--max-num-seqs", "32"]}
+  - {id: vllm-ngram-spec,     engine: vllm,   args: ["--speculative-config", '{"method": "ngram", "num_speculative_tokens": 4, "prompt_lookup_min": 2, "prompt_lookup_max": 5}']}
+  - {id: sglang-bf16,         engine: sglang, args: []}
+  - {id: sglang-noradix,      engine: sglang, args: ["--disable-radix-cache"]}
+  - {id: sglang-fp8,          engine: sglang, args: ["--quantization", "fp8"]}

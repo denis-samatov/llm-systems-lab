@@ -88,7 +88,9 @@ def shutdown() -> None:
         dist.destroy_process_group()
 
 
-def wrap_model(model: nn.Module, mode: str, env: DistEnv, precision: str, reshard_after_forward: bool) -> nn.Module:
+def wrap_model(
+    model: nn.Module, mode: str, env: DistEnv, precision: str, reshard_after_forward: bool
+) -> nn.Module:
     model.to(env.device)
     if mode == "single":
         return model
@@ -159,4 +161,9 @@ def memory_breakdown(model: nn.Module, optimizer: torch.optim.Optimizer | None) 
                 if torch.is_tensor(v):
                     lv = local_tensor(v)
                     optim += lv.numel() * lv.element_size()
-    return {"param_bytes": params, "grad_bytes": grads, "optim_bytes": optim, "total_bytes": params + grads + optim}
+    return {
+        "param_bytes": params,
+        "grad_bytes": grads,
+        "optim_bytes": optim,
+        "total_bytes": params + grads + optim,
+    }

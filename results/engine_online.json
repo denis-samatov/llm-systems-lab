@@ -1,0 +1,232 @@
+{
+  "suite": "engine_online",
+  "manifest": {
+    "created_utc": "2026-10-22T12:20:27+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "engine",
+      "online"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "requests": 96,
+  "rows": [
+    {
+      "system": "continuous_s16",
+      "wall_s": 28.417143124001086,
+      "output_tokens": 4032,
+      "output_tok_per_s": 141.8861840687489,
+      "kv_used_peak_bytes": 1671168,
+      "kv_pool_bytes": 100663296,
+      "steps": 2860,
+      "mean_batch_seqs": 1.4097902097902097,
+      "prefill_tokens_computed": 2413,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 448,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.011169434162184189,
+        "p50": 0.010358852407080121,
+        "p95": 0.017534009170049103,
+        "n": 96
+      },
+      "tpot_s": {
+        "mean": 0.0050327784629735665,
+        "p50": 0.004638472120503636,
+        "p95": 0.007194476678751305,
+        "n": 96
+      },
+      "e2e_s": {
+        "mean": 0.2154939017764832,
+        "p50": 0.2079277130724222,
+        "p95": 0.3692170551871641,
+        "n": 96
+      },
+      "rate_rps": 4.0,
+      "offered_duration_s": 28.143099761243658
+    },
+    {
+      "system": "continuous_s16",
+      "wall_s": 6.550211169000249,
+      "output_tokens": 4032,
+      "output_tok_per_s": 615.5526739476704,
+      "kv_used_peak_bytes": 3145728,
+      "kv_pool_bytes": 100663296,
+      "steps": 1188,
+      "mean_batch_seqs": 3.393939393939394,
+      "prefill_tokens_computed": 2413,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 448,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.012001502905282754,
+        "p50": 0.011496598710436956,
+        "p95": 0.017688573267150787,
+        "n": 96
+      },
+      "tpot_s": {
+        "mean": 0.005879075037288364,
+        "p50": 0.005715011791125612,
+        "p95": 0.008263210310344911,
+        "n": 96
+      },
+      "e2e_s": {
+        "mean": 0.25220375320731137,
+        "p50": 0.25347056111695565,
+        "p95": 0.4082523495253554,
+        "n": 96
+      },
+      "rate_rps": 16.0,
+      "offered_duration_s": 6.312827673067197
+    },
+    {
+      "system": "continuous_s16",
+      "wall_s": 3.6776482019995456,
+      "output_tokens": 4032,
+      "output_tok_per_s": 1096.3528261914212,
+      "kv_used_peak_bytes": 5701632,
+      "kv_pool_bytes": 100663296,
+      "steps": 468,
+      "mean_batch_seqs": 8.615384615384615,
+      "prefill_tokens_computed": 2413,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 448,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.036649380913634864,
+        "p50": 0.017478440604463685,
+        "p95": 0.12873553427425577,
+        "n": 96
+      },
+      "tpot_s": {
+        "mean": 0.008813735947372218,
+        "p50": 0.008916380499169495,
+        "p95": 0.012100852530997968,
+        "n": 96
+      },
+      "e2e_s": {
+        "mean": 0.39474179272622223,
+        "p50": 0.3893132650946427,
+        "p95": 0.6723675909797748,
+        "n": 96
+      },
+      "rate_rps": 32.0,
+      "offered_duration_s": 3.214541807028041
+    },
+    {
+      "system": "continuous_s16",
+      "wall_s": 2.7803373589995317,
+      "output_tokens": 4032,
+      "output_tok_per_s": 1450.183729305016,
+      "kv_used_peak_bytes": 6291456,
+      "kv_pool_bytes": 100663296,
+      "steps": 316,
+      "mean_batch_seqs": 12.759493670886076,
+      "prefill_tokens_computed": 2413,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 448,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.28430613079164385,
+        "p50": 0.28802266360889917,
+        "p95": 0.6394099938202089,
+        "n": 96
+      },
+      "tpot_s": {
+        "mean": 0.009747262524348656,
+        "p50": 0.00988585818717743,
+        "p95": 0.011529864137942084,
+        "n": 96
+      },
+      "e2e_s": {
+        "mean": 0.6825564813229335,
+        "p50": 0.7120699690904075,
+        "p95": 0.9967481574503836,
+        "n": 96
+      },
+      "rate_rps": 64.0,
+      "offered_duration_s": 1.7856535419021393
+    },
+    {
+      "system": "continuous_s16",
+      "wall_s": 2.879477156999201,
+      "output_tokens": 4032,
+      "output_tok_per_s": 1400.2542059412904,
+      "kv_used_peak_bytes": 6389760,
+      "kv_pool_bytes": 100663296,
+      "steps": 297,
+      "mean_batch_seqs": 13.575757575757576,
+      "prefill_tokens_computed": 2413,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 448,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.7953725357772896,
+        "p50": 0.7510685018778531,
+        "p95": 1.777506397196703,
+        "n": 96
+      },
+      "tpot_s": {
+        "mean": 0.0105653219526571,
+        "p50": 0.010458887499995788,
+        "p95": 0.013757815962864448,
+        "n": 96
+      },
+      "e2e_s": {
+        "mean": 1.2253915220064187,
+        "p50": 1.1526204315714494,
+        "p95": 2.1637306455991165,
+        "n": 96
+      },
+      "rate_rps": 128.0,
+      "offered_duration_s": 0.7077304117517769
+    }
+  ]
+}

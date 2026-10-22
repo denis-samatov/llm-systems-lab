@@ -1,0 +1,205 @@
+{
+  "suite": "profile",
+  "manifest": {
+    "created_utc": "2026-10-22T11:15:24+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "profile"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "train_step": [
+    {
+      "op": "aten::mm",
+      "calls": 129,
+      "self_cpu_ms": 198.75671799999992,
+      "self_cpu_pct": 47.13089261515698,
+      "cpu_mem_mb": 271.8984375
+    },
+    {
+      "op": "aten::mul",
+      "calls": 244,
+      "self_cpu_ms": 38.78293900000026,
+      "self_cpu_pct": 9.196542143089706,
+      "cpu_mem_mb": 376.2405014038086
+    },
+    {
+      "op": "aten::_scaled_dot_product_flash_attention_for_cpu_backward",
+      "calls": 6,
+      "self_cpu_ms": 25.647951999999872,
+      "self_cpu_pct": 6.081861703465515,
+      "cpu_mem_mb": -0.744873046875
+    },
+    {
+      "op": "aten::_scaled_dot_product_flash_attention_for_cpu",
+      "calls": 6,
+      "self_cpu_ms": 16.902866000000017,
+      "self_cpu_pct": 4.008152128645982,
+      "cpu_mem_mb": -0.4716796875
+    },
+    {
+      "op": "aten::sum",
+      "calls": 51,
+      "self_cpu_ms": 12.322598999999842,
+      "self_cpu_pct": 2.922040050030578,
+      "cpu_mem_mb": 12.01971435546875
+    },
+    {
+      "op": "aten::_log_softmax",
+      "calls": 1,
+      "self_cpu_ms": 9.771501999999979,
+      "self_cpu_pct": 2.3171021140064854,
+      "cpu_mem_mb": 31.75
+    },
+    {
+      "op": "aten::_log_softmax_backward_data",
+      "calls": 1,
+      "self_cpu_ms": 9.730611000000005,
+      "self_cpu_pct": 2.307405690412264,
+      "cpu_mem_mb": 31.75
+    },
+    {
+      "op": "aten::pow",
+      "calls": 39,
+      "self_cpu_ms": 9.145258999999784,
+      "self_cpu_pct": 2.168602018608437,
+      "cpu_mem_mb": 51.69451904296875
+    },
+    {
+      "op": "Optimizer.step#AdamW.step",
+      "calls": 1,
+      "self_cpu_ms": 8.406512999999512,
+      "self_cpu_pct": 1.9934242497951604,
+      "cpu_mem_mb": -41.775390625
+    },
+    {
+      "op": "aten::add",
+      "calls": 50,
+      "self_cpu_ms": 6.8081789999999165,
+      "self_cpu_pct": 1.614413623763716,
+      "cpu_mem_mb": 60.6554069519043
+    },
+    {
+      "op": "aten::clone",
+      "calls": 16,
+      "self_cpu_ms": 6.363998999999929,
+      "self_cpu_pct": 1.5090858638144908,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::slice",
+      "calls": 62,
+      "self_cpu_ms": 5.151056999999834,
+      "self_cpu_pct": 1.221462684453991,
+      "cpu_mem_mb": 0.0
+    }
+  ],
+  "decode_step_16_seqs": [
+    {
+      "op": "aten::mm",
+      "calls": 43,
+      "self_cpu_ms": 1.9484969999999966,
+      "self_cpu_pct": 22.27189192612095,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::index",
+      "calls": 43,
+      "self_cpu_ms": 0.8088519999999914,
+      "self_cpu_pct": 9.245415480868907,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::_scaled_dot_product_flash_attention_for_cpu",
+      "calls": 6,
+      "self_cpu_ms": 0.5832769999999987,
+      "self_cpu_pct": 6.667027101910879,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::copy_",
+      "calls": 102,
+      "self_cpu_ms": 0.5751700000000021,
+      "self_cpu_pct": 6.574361715284682,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::mul",
+      "calls": 96,
+      "self_cpu_ms": 0.5253230000000036,
+      "self_cpu_pct": 6.00459589227273,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::as_strided",
+      "calls": 502,
+      "self_cpu_ms": 0.27958599999999845,
+      "self_cpu_pct": 3.1957499426770624,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::arange",
+      "calls": 108,
+      "self_cpu_ms": 0.25493400000000493,
+      "self_cpu_pct": 2.913970355763359,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::matmul",
+      "calls": 43,
+      "self_cpu_ms": 0.2288009999999972,
+      "self_cpu_pct": 2.6152625046835314,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::cat",
+      "calls": 13,
+      "self_cpu_ms": 0.19818700000000036,
+      "self_cpu_pct": 2.2653355099659622,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::argmax",
+      "calls": 16,
+      "self_cpu_ms": 0.19586799999999677,
+      "self_cpu_pct": 2.238828660134141,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::add",
+      "calls": 53,
+      "self_cpu_ms": 0.18497899999999515,
+      "self_cpu_pct": 2.114364197944275,
+      "cpu_mem_mb": 0.0
+    },
+    {
+      "op": "aten::div_",
+      "calls": 13,
+      "self_cpu_ms": 0.1631749999999947,
+      "self_cpu_pct": 1.8651380859424853,
+      "cpu_mem_mb": 0.0
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "suite": "quant",
+  "manifest": {
+    "created_utc": "2026-10-22T11:15:18+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "quant"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "rows": [
+    {
+      "scheme": "fp32",
+      "dev_perplexity": 24.33355543657768,
+      "weight_bytes": 21902336,
+      "decode_tok_per_s_b1": {
+        "mean": 364.5519940825277,
+        "p50": 361.8670887578912,
+        "p95": 396.1765193984174,
+        "n": 8
+      },
+      "prefill_tok_per_s_b16": 14933.852403983834
+    },
+    {
+      "scheme": "bf16",
+      "dev_perplexity": 24.33328675277116,
+      "weight_bytes": 10951168,
+      "decode_tok_per_s_b1": {
+        "mean": 226.40276105429425,
+        "p50": 226.32091177027263,
+        "p95": 272.18483969743124,
+        "n": 8
+      },
+      "prefill_tok_per_s_b16": 43261.631872744314
+    },
+    {
+      "scheme": "int8-weight-only",
+      "dev_perplexity": 24.328228726457333,
+      "weight_bytes": 8689664,
+      "decode_tok_per_s_b1": {
+        "mean": 224.0759113580147,
+        "p50": 239.7021186428762,
+        "p95": 254.91506032169067,
+        "n": 8
+      },
+      "prefill_tok_per_s_b16": 18464.660309624996
+    },
+    {
+      "scheme": "int8-dynamic",
+      "dev_perplexity": 24.85556244849106,
+      "weight_bytes": 8631296,
+      "decode_tok_per_s_b1": {
+        "mean": 230.37098421463432,
+        "p50": 220.38716696794023,
+        "p95": 302.8699036243559,
+        "n": 8
+      },
+      "prefill_tok_per_s_b16": 26388.992728584795
+    }
+  ],
+  "note": "LM head and embedding stay fp32 in all schemes (tied weights)."
+}

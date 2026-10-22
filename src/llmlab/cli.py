@@ -1,10 +1,10 @@
 """Command line interface.
 
-    llmlab data download                      # fetch + verify RuMedTop3
-    llmlab train CONFIG [-o key=value ...]    # single process, or under torchrun for ddp/fsdp2
-    llmlab bench {comm,engine,train,quant,spec}
-    llmlab report                             # regenerate results/REPORT.md and figures
-    llmlab list                               # list runs and benchmark results
+llmlab data download                      # fetch + verify RuMedTop3
+llmlab train CONFIG [-o key=value ...]    # single process, or under torchrun for ddp/fsdp2
+llmlab bench {comm,engine,train,quant,spec}
+llmlab report                             # regenerate results/REPORT.md and figures
+llmlab list                               # list runs and benchmark results
 """
 
 from __future__ import annotations
@@ -57,8 +57,10 @@ def _cmd_list(args) -> int:
     runs = Path(args.runs)
     for summary in sorted(runs.glob("*/summary.json")):
         s = json.loads(summary.read_text())
-        print(f"run  {s['name']:<28} mode={s['mode']:<6} world={s['world_size']} steps={s['end_step']} "
-              f"loss={s['final_loss']:.4f} tok/s={s['tokens_per_s'] or 0:.0f}")
+        print(
+            f"run  {s['name']:<28} mode={s['mode']:<6} world={s['world_size']} steps={s['end_step']} "
+            f"loss={s['final_loss']:.4f} tok/s={s['tokens_per_s'] or 0:.0f}"
+        )
     for res in sorted(Path(args.results).glob("*.json")):
         print(f"bench {res.name}")
     return 0

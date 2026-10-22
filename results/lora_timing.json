@@ -1,0 +1,61 @@
+{
+  "suite": "lora_timing",
+  "manifest": {
+    "created_utc": "2026-10-22T12:19:39+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "lora",
+      "timing"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "threads": 4,
+  "rows": [
+    {
+      "method": "linear_probe",
+      "median_step_s": 0.2433211850002408,
+      "p90_step_s": 0.2848293469996861,
+      "steps": 40,
+      "batch": 32,
+      "max_len": 128
+    },
+    {
+      "method": "lora_r8",
+      "median_step_s": 0.5019773879994318,
+      "p90_step_s": 0.5951415590006945,
+      "steps": 40,
+      "batch": 32,
+      "max_len": 128
+    },
+    {
+      "method": "full_ft",
+      "median_step_s": 0.5429695379989425,
+      "p90_step_s": 0.6293110599999636,
+      "steps": 40,
+      "batch": 32,
+      "max_len": 128
+    }
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "suite": "train_parallel",
+  "manifest": {
+    "created_utc": "2026-10-22T11:10:51+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "train"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "steps": 30,
+  "rows": [
+    {
+      "row": "single_fp32",
+      "nproc": 1,
+      "name": "single_fp32",
+      "mode": "single",
+      "world_size": 1,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.6409525871276855,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.3446966934285293,
+      "tokens_per_s": 5941.455311420444,
+      "memory_rank0": {
+        "param_bytes": 21902336,
+        "grad_bytes": 21902336,
+        "optim_bytes": 43804896,
+        "total_bytes": 87609568
+      },
+      "peak_rss_bytes_rank0": 1431990272,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809204101562
+        ],
+        [
+          5,
+          7.428933143615723
+        ],
+        [
+          10,
+          6.709634304046631
+        ],
+        [
+          15,
+          6.855281829833984
+        ],
+        [
+          20,
+          6.8149919509887695
+        ],
+        [
+          25,
+          6.646659851074219
+        ],
+        [
+          30,
+          6.6409525871276855
+        ]
+      ]
+    },
+    {
+      "row": "single_accum2",
+      "nproc": 1,
+      "name": "single_accum2",
+      "mode": "single",
+      "world_size": 1,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.6392412185668945,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.5324581431785711,
+      "tokens_per_s": 3846.3117265410287,
+      "memory_rank0": {
+        "param_bytes": 21902336,
+        "grad_bytes": 21902336,
+        "optim_bytes": 43804896,
+        "total_bytes": 87609568
+      },
+      "peak_rss_bytes_rank0": 1182969856,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809204101562
+        ],
+        [
+          5,
+          7.4289326667785645
+        ],
+        [
+          10,
+          6.709636449813843
+        ],
+        [
+          15,
+          6.855259656906128
+        ],
+        [
+          20,
+          6.814892053604126
+        ],
+        [
+          25,
+          6.6465744972229
+        ],
+        [
+          30,
+          6.6392412185668945
+        ]
+      ]
+    },
+    {
+      "row": "single_bf16",
+      "nproc": 1,
+      "name": "single_bf16",
+      "mode": "single",
+      "world_size": 1,
+      "precision": "bf16",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.7132768630981445,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.3311862599642999,
+      "tokens_per_s": 6183.831419276764,
+      "memory_rank0": {
+        "param_bytes": 21902336,
+        "grad_bytes": 21902336,
+        "optim_bytes": 43804896,
+        "total_bytes": 87609568
+      },
+      "peak_rss_bytes_rank0": 1295855616,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.38878059387207
+        ],
+        [
+          5,
+          7.429170608520508
+        ],
+        [
+          10,
+          6.706525802612305
+        ],
+        [
+          15,
+          6.89906120300293
+        ],
+        [
+          20,
+          7.042394638061523
+        ],
+        [
+          25,
+          6.713900089263916
+        ],
+        [
+          30,
+          6.7132768630981445
+        ]
+      ]
+    },
+    {
+      "row": "ddp_2",
+      "nproc": 2,
+      "name": "ddp_2",
+      "mode": "ddp",
+      "world_size": 2,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.642050504684448,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.43115657307134825,
+      "tokens_per_s": 4750.014560629451,
+      "memory_rank0": {
+        "param_bytes": 21902336,
+        "grad_bytes": 21902336,
+        "optim_bytes": 43804896,
+        "total_bytes": 87609568
+      },
+      "peak_rss_bytes_rank0": 1207627776,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809204101562
+        ],
+        [
+          5,
+          7.428931951522827
+        ],
+        [
+          10,
+          6.709638357162476
+        ],
+        [
+          15,
+          6.855242729187012
+        ],
+        [
+          20,
+          6.8148181438446045
+        ],
+        [
+          25,
+          6.646489381790161
+        ],
+        [
+          30,
+          6.642050504684448
+        ]
+      ]
+    },
+    {
+      "row": "fsdp2_2",
+      "nproc": 2,
+      "name": "fsdp2_2",
+      "mode": "fsdp2",
+      "world_size": 2,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.64027738571167,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.6835815479999577,
+      "tokens_per_s": 2995.9849062516337,
+      "memory_rank0": {
+        "param_bytes": 10951168,
+        "grad_bytes": 10951168,
+        "optim_bytes": 21902560,
+        "total_bytes": 43804896
+      },
+      "peak_rss_bytes_rank0": 1202081792,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809204101562
+        ],
+        [
+          5,
+          7.428932428359985
+        ],
+        [
+          10,
+          6.709634304046631
+        ],
+        [
+          15,
+          6.855276346206665
+        ],
+        [
+          20,
+          6.814957618713379
+        ],
+        [
+          25,
+          6.646634817123413
+        ],
+        [
+          30,
+          6.64027738571167
+        ]
+      ]
+    },
+    {
+      "row": "fsdp2_2_no_reshard",
+      "nproc": 2,
+      "name": "fsdp2_2_no_reshard",
+      "mode": "fsdp2",
+      "world_size": 2,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.64027738571167,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.5802108963572274,
+      "tokens_per_s": 3529.7510144295466,
+      "memory_rank0": {
+        "param_bytes": 10951168,
+        "grad_bytes": 10951168,
+        "optim_bytes": 21902560,
+        "total_bytes": 43804896
+      },
+      "peak_rss_bytes_rank0": 1198505984,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809204101562
+        ],
+        [
+          5,
+          7.428932428359985
+        ],
+        [
+          10,
+          6.709634304046631
+        ],
+        [
+          15,
+          6.855276346206665
+        ],
+        [
+          20,
+          6.814957618713379
+        ],
+        [
+          25,
+          6.646634817123413
+        ],
+        [
+          30,
+          6.64027738571167
+        ]
+      ]
+    },
+    {
+      "row": "ddp_4",
+      "nproc": 4,
+      "name": "ddp_4",
+      "mode": "ddp",
+      "world_size": 4,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.647173643112183,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.3898444760355752,
+      "tokens_per_s": 5253.376989784793,
+      "memory_rank0": {
+        "param_bytes": 21902336,
+        "grad_bytes": 21902336,
+        "optim_bytes": 43804896,
+        "total_bytes": 87609568
+      },
+      "peak_rss_bytes_rank0": 1050148864,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809442520142
+        ],
+        [
+          5,
+          7.428932189941406
+        ],
+        [
+          10,
+          6.709639191627502
+        ],
+        [
+          15,
+          6.855234742164612
+        ],
+        [
+          20,
+          6.814783453941345
+        ],
+        [
+          25,
+          6.646447777748108
+        ],
+        [
+          30,
+          6.647173643112183
+        ]
+      ]
+    },
+    {
+      "row": "fsdp2_4",
+      "nproc": 4,
+      "name": "fsdp2_4",
+      "mode": "fsdp2",
+      "world_size": 4,
+      "precision": "fp32",
+      "n_params": 5475584,
+      "start_step": 0,
+      "end_step": 30,
+      "final_loss": 6.640824913978577,
+      "global_batch_tokens": 2048,
+      "mean_step_s": 0.5886931088928772,
+      "tokens_per_s": 3478.892429795146,
+      "memory_rank0": {
+        "param_bytes": 5475584,
+        "grad_bytes": 5475584,
+        "optim_bytes": 10951392,
+        "total_bytes": 21902560
+      },
+      "peak_rss_bytes_rank0": 1010249728,
+      "preempted": false,
+      "steps_this_process": 30,
+      "curve": [
+        [
+          1,
+          8.388809442520142
+        ],
+        [
+          5,
+          7.428932785987854
+        ],
+        [
+          10,
+          6.709632635116577
+        ],
+        [
+          15,
+          6.85528290271759
+        ],
+        [
+          20,
+          6.814980149269104
+        ],
+        [
+          25,
+          6.646650195121765
+        ],
+        [
+          30,
+          6.640824913978577
+        ]
+      ]
+    }
+  ]
+}

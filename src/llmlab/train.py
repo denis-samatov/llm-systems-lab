@@ -23,11 +23,10 @@ import json
 import math
 import os
 import random
+import resource
 import signal
 import time
 from pathlib import Path
-
-import resource
 
 import torch
 
@@ -164,9 +163,11 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
             {
                 "world_size": env.world_size,
                 "n_params": n_params,
-                "data": {"tokenizer_sha256": streams.tokenizer_sha256,
-                         "train_tokens": int(streams.streams["train"].numel()),
-                         "dev_tokens": int(streams.streams["dev"].numel())},
+                "data": {
+                    "tokenizer_sha256": streams.tokenizer_sha256,
+                    "train_tokens": int(streams.streams["train"].numel()),
+                    "dev_tokens": int(streams.streams["dev"].numel()),
+                },
                 "resumed_from": resumed_from,
             },
         )
@@ -201,7 +202,9 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
                 x, y = sampler.micro_batch(step, micro, env.rank, world, cfg.train.micro_batch_size, accum)
                 x, y = x.to(env.device), y.to(env.device)
                 with grad_sync_context(model, cfg.parallel.mode, sync=micro == accum - 1):
-                    with torch.autocast(env.device.type, dtype=torch.bfloat16, enabled=cfg.train.precision == "bf16"):
+                    with torch.autocast(
+                        env.device.type, dtype=torch.bfloat16, enabled=cfg.train.precision == "bf16"
+                    ):
                         logits = model(x)
                     loss_sum = token_loss_sum(logits, y)
                     (loss_sum * (world / global_tokens)).backward()
@@ -231,8 +234,15 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
                     log_metrics(record, step=done)
             stop = bool(all_reduce_sum(torch.tensor(float(preempt.requested))) > 0)
             if done % cfg.train.checkpoint_every == 0 or done == end_step or stop:
-                save_checkpoint(run_dir, done, model, optimizer, env, {**meta_base, "loss": last_loss},
-                                keep=cfg.train.keep_checkpoints)
+                save_checkpoint(
+                    run_dir,
+                    done,
+                    model,
+                    optimizer,
+                    env,
+                    {**meta_base, "loss": last_loss},
+                    keep=cfg.train.keep_checkpoints,
+                )
             if stop:
                 break
         steady = step_times[2:] if len(step_times) > 4 else step_times
@@ -259,7 +269,9 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
         if step_times and step + 1 == cfg.train.steps:
             full = export_full_state_dict(model)  # collective under FSDP2: all ranks call it
             if env.is_main:
-                torch.save({"model_config": cfg.model.model_dump(), "state_dict": full}, run_dir / "final_model.pt")
+                torch.save(
+                    {"model_config": cfg.model.model_dump(), "state_dict": full}, run_dir / "final_model.pt"
+                )
         if env.is_main:
             (run_dir / "summary.json").write_text(json.dumps(summary, indent=2))
             if mlflow_run is not None:

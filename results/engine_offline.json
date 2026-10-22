@@ -1,0 +1,249 @@
+{
+  "suite": "engine_offline",
+  "manifest": {
+    "created_utc": "2026-10-22T11:11:37+00:00",
+    "command": [
+      "/home/user/portfolio/llm-systems-lab/.venv/bin/llmlab",
+      "bench",
+      "engine",
+      "offline",
+      "online",
+      "prefix"
+    ],
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "tokenizers": "0.23.3",
+      "pydantic": "2.14.1",
+      "peft": "0.21.2",
+      "transformers": "5.20.2",
+      "mlflow": "3.17.2"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "torch_threads": 4,
+      "cuda_available": false,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+    },
+    "git_commit": "6f42ef8ff87dfa3aba63538f10de0dba7da18cb4",
+    "git_dirty": true,
+    "config": {},
+    "config_hash": "44136fa355b3678a"
+  },
+  "requests": 64,
+  "kv_bytes_per_token": 6144,
+  "threads": 4,
+  "rows": [
+    {
+      "system": "static_b8",
+      "wall_s": 5.341015569999399,
+      "output_tokens": 4527,
+      "output_tok_per_s": 847.5916126191913,
+      "kv_reserved_peak_bytes": 8798208,
+      "kv_needed_peak_bytes": 5314560,
+      "ttft_s": {
+        "mean": 2.3704832211244593,
+        "p50": 2.4427517834992614,
+        "p95": 4.640787150999131,
+        "n": 64
+      },
+      "tpot_s": {
+        "mean": 0.005417138566179533,
+        "p50": 0.005503795628810964,
+        "p95": 0.006248783150276547,
+        "n": 64
+      },
+      "e2e_s": {
+        "mean": 2.7495480446245324,
+        "p50": 2.8086963144996844,
+        "p95": 5.066660143649733,
+        "n": 64
+      }
+    },
+    {
+      "system": "static_b16",
+      "wall_s": 4.706344869000532,
+      "output_tokens": 4527,
+      "output_tok_per_s": 961.8929606748903,
+      "kv_reserved_peak_bytes": 17891328,
+      "kv_needed_peak_bytes": 10450944,
+      "ttft_s": {
+        "mean": 1.9627785352506635,
+        "p50": 2.035067450500719,
+        "p95": 3.7236627890006275,
+        "n": 64
+      },
+      "tpot_s": {
+        "mean": 0.009107428569557912,
+        "p50": 0.008758436014335532,
+        "p95": 0.011634166015431088,
+        "n": 64
+      },
+      "e2e_s": {
+        "mean": 2.62003590768785,
+        "p50": 2.6149617915007184,
+        "p95": 4.453384692650434,
+        "n": 64
+      }
+    },
+    {
+      "system": "continuous_s8",
+      "wall_s": 4.357005547999506,
+      "output_tokens": 4527,
+      "output_tok_per_s": 1039.0163496758792,
+      "kv_used_peak_bytes": 5210112,
+      "kv_pool_bytes": 100663296,
+      "steps": 607,
+      "mean_batch_seqs": 7.457990115321252,
+      "prefill_tokens_computed": 1587,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 410,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 1.905129796890435,
+        "p50": 2.058694479999758,
+        "p95": 3.7736778111494456,
+        "n": 64
+      },
+      "tpot_s": {
+        "mean": 0.007291505552142167,
+        "p50": 0.006978915285268764,
+        "p95": 0.009094713439799307,
+        "n": 64
+      },
+      "e2e_s": {
+        "mean": 2.4128340993903947,
+        "p50": 2.563629248500092,
+        "p95": 4.246141231850106,
+        "n": 64
+      }
+    },
+    {
+      "system": "continuous_s16",
+      "wall_s": 3.684966421000354,
+      "output_tokens": 4527,
+      "output_tok_per_s": 1228.5050887305129,
+      "kv_used_peak_bytes": 9043968,
+      "kv_pool_bytes": 100663296,
+      "steps": 340,
+      "mean_batch_seqs": 13.314705882352941,
+      "prefill_tokens_computed": 1587,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 410,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 1.3073583294844155,
+        "p50": 1.5367484349999359,
+        "p95": 2.7808658643004036,
+        "n": 64
+      },
+      "tpot_s": {
+        "mean": 0.011364311002466668,
+        "p50": 0.01105217922431947,
+        "p95": 0.014139255926115535,
+        "n": 64
+      },
+      "e2e_s": {
+        "mean": 2.1148347609531726,
+        "p50": 2.097039786499863,
+        "p95": 3.4759797932503713,
+        "n": 64
+      }
+    },
+    {
+      "system": "continuous_s32",
+      "wall_s": 2.8867771400000493,
+      "output_tokens": 4527,
+      "output_tok_per_s": 1568.1847889373,
+      "kv_used_peak_bytes": 18186240,
+      "kv_pool_bytes": 100663296,
+      "steps": 207,
+      "mean_batch_seqs": 21.8743961352657,
+      "prefill_tokens_computed": 1587,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 410,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 0.599698949875318,
+        "p50": 0.18500109150045319,
+        "p95": 1.8229970798500283,
+        "n": 64
+      },
+      "tpot_s": {
+        "mean": 0.016935601764942187,
+        "p50": 0.01744200651242543,
+        "p95": 0.020152110409391504,
+        "n": 64
+      },
+      "e2e_s": {
+        "mean": 1.7808052969065926,
+        "p50": 2.0608650750004927,
+        "p95": 2.7568936639504953,
+        "n": 64
+      }
+    },
+    {
+      "system": "no_kv_cache_sequential",
+      "requests": 8,
+      "wall_s": 5.212773494999965,
+      "output_tokens": 579,
+      "output_tok_per_s": 111.07330877801816
+    },
+    {
+      "system": "kv_cache_sequential",
+      "wall_s": 2.4338685349994194,
+      "output_tokens": 579,
+      "output_tok_per_s": 237.892881917773,
+      "kv_used_peak_bytes": 1081344,
+      "kv_pool_bytes": 100663296,
+      "steps": 579,
+      "mean_batch_seqs": 1.0,
+      "prefill_tokens_computed": 257,
+      "prompt_tokens_from_cache": 0,
+      "preemptions": 0,
+      "allocator": {
+        "allocated": 56,
+        "evicted": 0,
+        "prefix_hits": 0,
+        "prefix_queries": 0
+      },
+      "ttft_s": {
+        "mean": 1.2483230037496469,
+        "p50": 1.3488349949998337,
+        "p95": 2.265158859899657,
+        "n": 8
+      },
+      "tpot_s": {
+        "mean": 0.004147269696110186,
+        "p50": 0.0039714933952006625,
+        "p95": 0.0050401498845777095,
+        "n": 8
+      },
+      "e2e_s": {
+        "mean": 1.5446958179996955,
+        "p50": 1.8245316639995508,
+        "p95": 2.394314422050047,
+        "n": 8
+      },
+      "requests": 8
+    }
+  ]
+}

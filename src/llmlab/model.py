@@ -139,7 +139,11 @@ class GPT(nn.Module):
         input_ids: torch.Tensor,
         positions: torch.Tensor | None = None,
         ctx: AttentionContext | None = None,
+        logits_index: torch.Tensor | None = None,
     ) -> torch.Tensor:
+        """Return logits ``[B, T, V]``; with ``logits_index`` (flat indices into ``B*T``)
+        only those rows are projected through the LM head (``[len(index), V]``), which is
+        how inference avoids computing vocabulary logits for every prompt token."""
         B, T = input_ids.shape
         if positions is None:
             positions = torch.arange(T, device=input_ids.device).expand(B, T)
@@ -149,7 +153,20 @@ class GPT(nn.Module):
         x = self.embed(input_ids)
         for layer in self.layers:
             x = layer(x, cos, sin, ctx)
+        if logits_index is not None:
+            x = x.reshape(B * T, -1)[logits_index]
         return self.lm_head(self.norm(x))
+
+    def hidden(self, input_ids: torch.Tensor) -> torch.Tensor:
+        """Final normalized hidden states ``[B, T, d_model]`` (causal; right padding is harmless
+        for the hidden state of the last real token)."""
+        B, T = input_ids.shape
+        positions = torch.arange(T, device=input_ids.device).expand(B, T)
+        cos, sin = self.rope_cos[positions], self.rope_sin[positions]
+        x = self.embed(input_ids)
+        for layer in self.layers:
+            x = layer(x, cos, sin, None)
+        return self.norm(x)
 
     def num_params(self, trainable_only: bool = False) -> int:
         seen, total = set(), 0
@@ -170,5 +187,8 @@ def token_loss_sum(logits: torch.Tensor, targets: torch.Tensor, ignore_index: in
     ``tests/test_grad_accum.py``.
     """
     return F.cross_entropy(
-        logits.float().reshape(-1, logits.size(-1)), targets.reshape(-1), ignore_index=ignore_index, reduction="sum"
+        logits.float().reshape(-1, logits.size(-1)),
+        targets.reshape(-1),
+        ignore_index=ignore_index,
+        reduction="sum",
     )

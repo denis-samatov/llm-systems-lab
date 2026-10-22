@@ -14,7 +14,17 @@ from pathlib import Path
 
 import torch
 
-TRACKED_PACKAGES = ("torch", "numpy", "tokenizers", "pydantic", "peft", "transformers", "mlflow", "vllm", "sglang")
+TRACKED_PACKAGES = (
+    "torch",
+    "numpy",
+    "tokenizers",
+    "pydantic",
+    "peft",
+    "transformers",
+    "mlflow",
+    "vllm",
+    "sglang",
+)
 
 
 def _git(args: list[str]) -> str | None:

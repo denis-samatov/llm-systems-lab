@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_gpu:
+        description: "Run the GPU profile on a self-hosted CUDA runner"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  OMP_NUM_THREADS: "2"
+  MLFLOW_DISABLE_AGENT_HINT: "1"
+
+jobs:
+  lint-and-fast-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install (CPU torch)
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
+          python -m pip install -e '.[dev,lora,report]'
+      - run: ruff check . && ruff format --check .
+      - name: Data
+        run: llmlab data download
+      - name: Fast tests (single process)
+        run: pytest -q -m "not slow and not gpu"
+
+  multiprocess-cpu:
+    # DDP/FSDP2/torchrun tests: real multi-process gloo runs on one host.
+    runs-on: ubuntu-latest
+    needs: lint-and-fast-tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
+          python -m pip install -e '.[dev]'
+          llmlab data download
+      - name: Distributed semantics + fault recovery
+        run: pytest -q -m slow
+      - name: Smoke - train, DDP, FSDP2
+        run: |
+          llmlab train configs/tiny.yaml -o output_dir=/tmp/runs --no-resume
+          torchrun --nproc_per_node=2 -m llmlab.cli train configs/tiny.yaml -o output_dir=/tmp/runs -o name=ddp -o parallel.mode=ddp --no-resume
+          torchrun --nproc_per_node=2 -m llmlab.cli train configs/tiny.yaml -o output_dir=/tmp/runs -o name=fsdp -o parallel.mode=fsdp2 --no-resume
+
+  gpu:
+    # Only on demand, on a self-hosted runner labelled `gpu`. Not required for merge; when it
+    # does not run, GPU results simply do not exist (the report says "not run").
+    if: github.event_name == 'workflow_dispatch' && inputs.run_gpu
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install -e '.[dev]'
+      - run: pytest -q -m gpu
+      - run: python gpu/run_matrix.py --engine vllm --out results/gpu
