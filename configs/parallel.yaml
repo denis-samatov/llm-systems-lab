@@ -1,0 +1,6 @@
+# Used by the single vs DDP vs FSDP2 comparison. Global batch = micro * accum * world.
+name: parallel
+model: {vocab_size: 4096, d_model: 256, n_layers: 6, n_heads: 8, n_kv_heads: 4, max_seq_len: 256}
+data: {seq_len: 128}
+optim: {lr: 3.0e-3, warmup_steps: 5}
+train: {steps: 30, micro_batch_size: 8, grad_accum: 1, eval_every: 30, eval_batches: 4, checkpoint_every: 30, log_every: 5}

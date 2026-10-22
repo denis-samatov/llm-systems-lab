@@ -1,0 +1,6 @@
+# Smoke/test configuration: trains in seconds on CPU.
+name: tiny
+model: {vocab_size: 4096, d_model: 64, n_layers: 2, n_heads: 4, max_seq_len: 64}
+data: {seq_len: 32}
+optim: {lr: 3.0e-3, warmup_steps: 2}
+train: {steps: 12, micro_batch_size: 4, grad_accum: 1, eval_every: 6, eval_batches: 2, checkpoint_every: 6, log_every: 1}
