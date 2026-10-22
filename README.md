@@ -117,7 +117,7 @@ The tiny backbone stays far below TF-IDF; the point is the trade-off, not the ac
 [DDP](docs/learn/01-data-parallel-ddp.md) · [FSDP2](docs/learn/02-sharded-fsdp2.md) ·
 [KV memory](docs/learn/03-attention-and-kv-memory.md) · [Scheduling & speculation](docs/learn/04-inference-scheduling.md) ·
 [Trade-offs & limits](docs/learn/05-trade-offs-and-limits.md) · [Interview defense](docs/INTERVIEW.md) ·
-[PRD](docs/PRD.md) · [ADRs](docs/adr/)
+[PRD](docs/PRD.md) · [ADRs](docs/adr/) · [Demo and video script](docs/DEMO.md) · [Runbook](docs/RUNBOOK.md)
 
 ## Limits
 
