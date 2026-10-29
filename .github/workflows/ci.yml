@@ -26,8 +26,8 @@ jobs:
         with: {python-version: "3.12"}
       - name: Install (CPU torch)
         run: |
-          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
-          python -m pip install -e '.[dev,lora,report]'
+          python -m pip install --require-hashes --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-cpu-py312-linux.lock
+          python -m pip install --no-deps -e .
       - run: ruff check . && ruff format --check .
       - name: Data
         run: llmlab data download
@@ -43,8 +43,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: |
-          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
-          python -m pip install -e '.[dev]'
+          python -m pip install --require-hashes --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-cpu-py312-linux.lock
+          python -m pip install --no-deps -e .
           llmlab data download
       - name: Distributed semantics + fault recovery
         run: pytest -q -m slow

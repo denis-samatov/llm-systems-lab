@@ -43,3 +43,76 @@ Result files are regenerated only by `llmlab bench ...` / `scripts/reproduce.sh`
 manifest; `llmlab report` rebuilds `results/REPORT.md` from them. A PR that changes a number in
 the README must include the regenerated result file that shows it. Rollback = revert the
 commit; nothing is deployed.
+
+## Inference input and CPU quantization contract
+
+`SamplingParams` requires a nonnegative integer `max_new_tokens`, finite nonnegative
+temperature and finite `top_p` in `(0,1]`. Zero output tokens is a no-op: the scheduler
+finishes without a forward pass or cache allocation. Static batching likewise emits no
+tokens for a zero-budget row. Prompts must be nonempty; engine capacities must be positive
+integers. Invalid requests fail before scheduling, rather than becoming stuck work.
+
+`int8-dynamic` requires an explicitly selected quantized CPU backend in the caller's
+PyTorch process. Inspect `torch.backends.quantized.supported_engines`, select a supported
+backend using `torch.backends.quantized.engine`, and record it with the benchmark manifest.
+The library refuses an inactive/unsupported backend with an actionable `ValueError` and
+never silently changes the caller's process-global backend. The quantization equivalence
+test selects a real available backend in an isolated subprocess so the setting cannot leak
+into other tests. A PyTorch build with no such backend cannot qualify dynamic INT8.
+
+This is the existing `torch.ao` implementation; its deprecation/runtime compatibility must
+be resolved against the pinned supported PyTorch matrix before upgrading that environment.
+An isolated CPU test is not evidence that a CUDA quantization kernel exists or is fast.
+
+## Gates before extending the claims
+
+Use the existing safe CPU gate `pytest -q -m "not slow and not gpu"`. A full suite also
+launches torchrun/gloo listeners and reads prepared RuMed data: run it only in the approved
+local/distributed environment with those licensed, hash-verified data already prepared.
+Never replace the data with synthetic rows while describing the result as a corpus replay.
+
+For CUDA or multi-node claims, first implement device-correct input/cache/sampler placement
+and capture/restore all relevant CUDA RNG state. Then, on authorized hardware with pinned
+packages/model/data, execute GPU equivalence, checkpoint corruption/interruption,
+rank failure, resharded resume and synchronized benchmark repeats. Record warmup, batch,
+context distribution, device memory, p50/p95 latency, throughput and confidence intervals.
+CPU/gloo results currently establish none of CUDA scaling, production serving availability
+or comparative model accuracy. The external GPU-engine harness is a separate code path.
+
+Checkpoints are trusted executable artifacts (`torch.load(..., weights_only=False)` for RNG
+state); do not accept arbitrary third-party uploads. Preserve code/environment/data hashes
+and a trusted manifest next to copies, validate before load, and perform a restore drill
+on the intended filesystem with a separate output directory. Signing/deployment trust and
+actual CUDA/target recovery acceptance require infrastructure and hardware outside the
+offline patch. Historical `results/` are not rewritten by these fixes.
+
+## Frozen CPU acceptance profiles
+
+The source dependency ranges are portable; the following resolved profiles are
+intentionally specific. They do not replace the historical benchmark environments.
+
+- `requirements-cpu-py313-macos.lock`: Python3.13, Apple Silicon, macOS14+.
+- `requirements-cpu-py312-linux.lock`: Python3.12, Linux x86_64, CPU PyTorch index.
+
+Both include dev tools and use `requirements-cpu.constraints` to exclude the
+audited torch/setuptools versions. Rebuild with the command in each header;
+for the macOS profile set `MACOSX_DEPLOYMENT_TARGET=14.0`. Install into an empty
+virtual environment, then the local package without resolving a second environment:
+
+```sh
+uv pip sync requirements-cpu-py313-macos.lock
+uv pip install --no-deps -e .
+OMP_NUM_THREADS=2 pytest -q -m "not slow and not gpu"
+```
+
+For Linux substitute the Linux lock and add `--torch-backend cpu` to `uv pip sync`.
+This is needed to locate the `+cpu` wheel; the lock alone is not a generic PyPI
+installation recipe. Optional LoRA/tracking/report packages need separate locked
+qualification and are excluded from these CPU core profiles. Registry hashes do
+not attest data, weights, drivers, CUDA results or target-filesystem recovery.
+
+A remediation-only authored synthetic CPU drill also ran baseline4steps, hard
+exit13 at step3, restore from step2 and completion at step4 with exactly equal
+final weights. This is a local checkpoint contract check, not a RuMed benchmark
+or a distributed/target-filesystem qualification; old performance tables remain
+historical.

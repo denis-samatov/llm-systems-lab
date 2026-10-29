@@ -1,0 +1,4 @@
+# CPU acceptance profile, not a CUDA or historical benchmark environment.
+# Fixed torch line, excluding audited memory-corruption versions; modern setuptools.
+torch>=2.13.0,<2.14
+setuptools>=84.2.1

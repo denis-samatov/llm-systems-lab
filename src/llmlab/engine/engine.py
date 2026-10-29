@@ -36,6 +36,18 @@ class SamplingParams:
     seed: int | None = None
     stop_token_ids: tuple[int, ...] = ()
 
+    def __post_init__(self):
+        if (
+            isinstance(self.max_new_tokens, bool)
+            or not isinstance(self.max_new_tokens, int)
+            or self.max_new_tokens < 0
+        ):
+            raise ValueError("max_new_tokens must be a nonnegative integer")
+        if not math.isfinite(self.temperature) or self.temperature < 0:
+            raise ValueError("temperature must be finite and nonnegative")
+        if not math.isfinite(self.top_p) or not 0 < self.top_p <= 1:
+            raise ValueError("top_p must be finite and in (0, 1]")
+
 
 class Status(enum.Enum):
     WAITING = "waiting"
@@ -92,6 +104,12 @@ class EngineConfig:
     enable_prefix_caching: bool = False
     enable_chunked_prefill: bool = True
 
+    def __post_init__(self):
+        for name in ("num_blocks", "block_size", "max_num_seqs", "max_num_batched_tokens"):
+            value = getattr(self, name)
+            if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+
 
 @dataclass
 class StepStats:
@@ -125,6 +143,8 @@ class LLMEngine:
 
     # ---------------------------------------------------------------- public API
     def add_request(self, req: Request) -> None:
+        if not req.prompt_ids:
+            raise ValueError("prompt_ids must not be empty")
         if req.num_tokens + req.params.max_new_tokens > self.model.cfg.max_seq_len:
             raise ValueError(f"{req.req_id}: prompt + max_new_tokens exceeds max_seq_len")
         if (
@@ -132,6 +152,11 @@ class LLMEngine:
             > self.cfg.num_blocks
         ):
             raise ValueError(f"{req.req_id}: request can never fit in the KV cache")
+        if req.params.max_new_tokens == 0:
+            req.status, req.finish_reason = Status.FINISHED, "length"
+            req.finish_time = self.clock()
+            self.finished.append(req)
+            return
         if req.params.seed is not None:
             req.generator = torch.Generator().manual_seed(req.params.seed)
         self.waiting.append(req)
@@ -368,7 +393,7 @@ def generate_static_batch(
     logits = model(ids, pos, attn)[:, -1]
     attn.advance(P)
     outputs: list[list[int]] = [[] for _ in range(B)]
-    done = [False] * B
+    done = [p.max_new_tokens == 0 for p in params]
     first, finish = [None] * B, [None] * B
     for _step in range(max_new):
         now = clock()

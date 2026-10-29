@@ -57,6 +57,13 @@ def quantize(model: GPT, scheme: str) -> GPT:
             setattr(parent, name, Int8WeightOnlyLinear(child))
         return m
     if scheme == "int8-dynamic":
+        engine = torch.backends.quantized.engine
+        available = [name for name in torch.backends.quantized.supported_engines if name != "none"]
+        if engine not in available:
+            raise ValueError(
+                "int8-dynamic requires an active quantized CPU backend; "
+                f"select torch.backends.quantized.engine from {available} in your application"
+            )
         from torch.ao.quantization import quantize_dynamic
 
         for block in m.layers:
