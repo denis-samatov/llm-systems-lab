@@ -218,3 +218,48 @@ def test_rejects_requests_that_cannot_fit(model):
     eng = LLMEngine(model, EngineConfig(num_blocks=2, block_size=4))
     with pytest.raises(ValueError):
         eng.add_request(Request("x", list(range(1, 10)), SamplingParams(max_new_tokens=4)))
+
+
+def test_zero_output_budget_matches_reference_without_using_cache(model):
+    params = SamplingParams(max_new_tokens=0)
+    engine = LLMEngine(model, EngineConfig(num_blocks=8, block_size=16))
+    request = Request("zero-budget", [1, 2, 3], params)
+    engine.add_request(request)
+    assert engine.run()[0].output_ids == generate_no_cache(model, [1, 2, 3], params) == []
+    assert engine.allocator.num_used() == 0 and not engine.step_stats
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"max_new_tokens": -1},
+        {"temperature": float("nan")},
+        {"temperature": -1},
+        {"top_p": 0},
+        {"top_p": float("inf")},
+    ],
+)
+def test_invalid_sampling_is_rejected_before_scheduling(kwargs):
+    with pytest.raises(ValueError):
+        SamplingParams(**kwargs)
+
+
+@pytest.mark.parametrize(
+    "kwargs", [{"num_blocks": 0}, {"block_size": -1}, {"max_num_seqs": 0}, {"max_num_batched_tokens": 0}]
+)
+def test_nonpositive_engine_capacity_is_rejected(kwargs):
+    with pytest.raises(ValueError):
+        EngineConfig(**kwargs)
+
+
+def test_empty_prompt_is_rejected_before_scheduling(model):
+    engine = LLMEngine(model, EngineConfig())
+    with pytest.raises(ValueError, match="prompt"):
+        engine.add_request(Request("empty", [], SamplingParams()))
+
+
+def test_static_batch_does_not_generate_for_a_zero_budget_row(model):
+    outputs, _, _, _ = generate_static_batch(
+        model, [[1, 2], [3, 4]], [SamplingParams(max_new_tokens=0), SamplingParams(max_new_tokens=2)]
+    )
+    assert outputs[0] == [] and len(outputs[1]) == 2
