@@ -116,3 +116,10 @@ exit13 at step3, restore from step2 and completion at step4 with exactly equal
 final weights. This is a local checkpoint contract check, not a RuMed benchmark
 or a distributed/target-filesystem qualification; old performance tables remain
 historical.
+
+CI uses `uv pip sync --system --require-hashes --torch-backend cpu` for the Linux
+profile, followed by an editable install with `--no-deps`. The backend option
+is required even when the generated lock emits PyPI as its default index:
+it directs the `+cpu` requirement to the PyTorch wheel index. A generic pip
+command that loses this per-package index routing cannot reproduce that profile.
+See <https://docs.astral.sh/uv/guides/integration/pytorch/>.
