@@ -123,3 +123,13 @@ is required even when the generated lock emits PyPI as its default index:
 it directs the `+cpu` requirement to the PyTorch wheel index. A generic pip
 command that loses this per-package index routing cannot reproduce that profile.
 See <https://docs.astral.sh/uv/guides/integration/pytorch/>.
+
+## Offline CPU checkpoint qualification
+
+`pytest -q tests/test_checkpoint_local.py` exercises actual single-process DCP files
+with synthetic tensors: exact model/Adam/CPU-RNG restoration, plus injected partial-write
+failure preserving the last published checkpoint. It needs no downloaded dataset or
+GPU. The existing `slow` tests remain the separate DDP/FSDP2/torchrun acceptance gate.
+Only load checkpoints from a trusted release: DCP metadata and RNG files are not an
+untrusted-code sandbox. Local filesystem replay does not establish target-storage
+crash durability or CUDA RNG equivalence.

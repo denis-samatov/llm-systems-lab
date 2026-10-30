@@ -278,6 +278,11 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
                 from llmlab.tracking import end_run
 
                 end_run(summary, run_dir)
+        # Every rank must finish export/summary work before any tears down its group.
+        # In particular, Gloo workers may still release FSDP collective tensors while
+        # another rank returns an empty CPU-offloaded state dict and exits Python.
+        # Keep this on the successful path: a failed peer cannot join a cleanup barrier.
+        barrier()
         return summary
     finally:
         preempt.restore()
