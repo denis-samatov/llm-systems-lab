@@ -131,3 +131,12 @@ The tiny backbone stays far below TF-IDF; the point is the trade-off, not the ac
 RuMedTop3 from [sb-ai-lab/MedBench](https://github.com/sb-ai-lab/MedBench) (Apache-2.0 code;
 records derived from RuMedPrime, CC BY 3.0). Raw data is downloaded, not redistributed.
 Code: MIT.
+
+## Fresh CPU checkpoint qualification
+
+The [2026-10-31 CPU qualification](docs/CPU_QUALIFICATION.md) runs actual 12-step
+training/crash/resume trajectories for two fixed seeds and compares complete
+model, Adam and RNG states. Optimizer-reset negative controls and separate
+8-step single/DDP/FSDP2 runs passed on the documented macOS CPU profile. Launch
+failures are retained, and macOS RSS reporting units are corrected. These results
+qualify small CPU mechanisms, not GPU scaling, clinical quality or deployment.
