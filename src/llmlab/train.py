@@ -25,6 +25,7 @@ import os
 import random
 import resource
 import signal
+import sys
 import time
 from pathlib import Path
 
@@ -260,8 +261,9 @@ def train(cfg: ExperimentConfig, resume: bool = True, max_steps: int | None = No
             "mean_step_s": mean_step,
             "tokens_per_s": global_tokens / mean_step if mean_step else None,
             "memory_rank0": mem,
-            # ru_maxrss is KiB on Linux: process-wide peak, includes the Python/torch runtime.
-            "peak_rss_bytes_rank0": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+            # Process-wide peak includes Python/torch; macOS reports bytes, Linux KiB.
+            "peak_rss_bytes_rank0": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            * (1 if sys.platform == "darwin" else 1024),
             "preempted": preempt.requested,
         }
         if steps_done := len(step_times):
