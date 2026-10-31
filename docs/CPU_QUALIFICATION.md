@@ -40,7 +40,7 @@ power-loss/storage durability qualification.
 
 Runtime: Python **3.13.15**, PyTorch **2.13.0**, macOS **26.6.2 arm64**, CPU only.
 The existing environment was reused. This is distinct from the maintained Linux
-Python 3.12/PyTorch 2.15 CI lock; a local pass does not certify every dependency profile.
+Python 3.12/PyTorch 2.13.0+cpu CI lock; a local pass does not certify every dependency profile.
 Tokenizer SHA-256:
 `b4f3de632853c7ce75ec60086d32ebe2655e2b56f2b176c55a8193479dc56809`.
 
