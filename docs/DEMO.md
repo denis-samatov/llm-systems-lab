@@ -1,5 +1,57 @@
 # Demo script (about 4 minutes)
 
+## CPU prefix-cache demo
+
+Two synthetic requests share a 32-token prefix and have different three-token suffixes.
+The [example](../examples/prefix_cache_cpu.py) uses one freshly initialized model and compares
+the greedy token sequences from three paths: reference decoding without cache, paged KV
+decoding, and paged KV decoding with prefix reuse. The example uses no model or dataset downloads.
+
+### Set up the CPU environment
+
+Run the commands from the source checkout with [uv](https://docs.astral.sh/uv/) installed.
+
+**Linux x86-64, Python 3.12**
+
+```bash
+uv venv --python 3.12 .venv
+uv pip sync --python .venv/bin/python --require-hashes --torch-backend cpu requirements-cpu-py312-linux.lock
+```
+
+**Apple Silicon, Python 3.13**
+
+```bash
+uv venv --python 3.13 .venv
+uv pip sync --python .venv/bin/python --require-hashes requirements-cpu-py313-macos.lock
+```
+
+Then install the project and run the example:
+
+```bash
+uv pip install --python .venv/bin/python --no-deps -e .
+.venv/bin/python examples/prefix_cache_cpu.py
+```
+
+### Read the result
+
+```json
+{
+  "requests": 2,
+  "greedy_outputs_match": true,
+  "prefill_tokens_without_prefix_reuse": 70,
+  "prefill_tokens_with_prefix_reuse": 38,
+  "prefill_tokens_saved": 32
+}
+```
+
+The first request prefills 35 tokens in both paged runs. With prefix reuse, the second
+request retrieves four cached blocks of eight tokens and prefills its three-token suffix.
+The counter describes prefill work for this fixed workload. See the
+[CPU benchmark report](../results/REPORT.md) for measured throughput and latency, and
+[the inference tests](../tests/test_engine.py) for context sensitivity, cache eviction and preemption.
+
+## Training and serving walkthrough
+
 1. `torchrun --nproc_per_node=2 -m llmlab.cli train configs/tiny.yaml -o parallel.mode=fsdp2 -o name=demo`
    and show `memory_rank0` halving vs single.
 2. `pytest -q tests/test_checkpoint.py -k torchrun`: a rank is killed, torchrun restarts it,
